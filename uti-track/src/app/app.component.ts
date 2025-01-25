@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {account, databases} from '../lib/appwrite';
-import {ID, Query} from 'appwrite';
+import {ID} from 'appwrite';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,7 @@ import {ID, Query} from 'appwrite';
     FormsModule
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.scss',
   standalone: true
 })
 export class AppComponent {
