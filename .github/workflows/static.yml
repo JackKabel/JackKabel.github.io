@@ -40,12 +40,12 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
-        working-directory: uti-track/uti-track
+        working-directory: uti-track
 
       # Step 4: Build the Angular project
       - name: Build Angular project
         run: npm run build --prod
-        working-directory: uti-track/uti-track
+        working-directory: uti-track
 
 
       - name: Setup Pages
