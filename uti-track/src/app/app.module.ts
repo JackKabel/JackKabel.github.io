@@ -6,6 +6,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {provideRouter, RouterModule, withComponentInputBinding} from "@angular/router";
 import {routes} from "./app.routes";
 import {
+  NbAlertModule,
   NbButtonModule,
   NbCalendarModule,
   NbCalendarRangeModule,
@@ -14,6 +15,7 @@ import {
   NbInputModule,
   NbLayoutModule,
   NbMenuModule,
+  NbProgressBarModule,
   NbSidebarModule,
   NbThemeModule
 } from "@nebular/theme";
@@ -44,6 +46,8 @@ import {HomeComponent} from './home/home.component';
     NbCalendarModule,
     NbCalendarRangeModule,
     NbMenuModule,
+    NbProgressBarModule,
+    NbAlertModule,
   ],
   providers: [
     provideAnimationsAsync(),

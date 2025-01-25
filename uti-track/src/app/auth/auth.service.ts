@@ -50,7 +50,7 @@ export class AuthService {
 
       // Start periodic session checking
       this.startSessionCheck();
-      void this.router.navigate(['/home']);
+      void this.router.navigate(['/']);
     } catch (error) {
       console.error('Login failed:', error);
       this._isLoggedIn$.next(false);

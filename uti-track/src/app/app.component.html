@@ -20,7 +20,7 @@
   </nb-layout-header>
 
 
-  <nb-sidebar *ngIf="authService.userInfo">
+  <nb-sidebar *ngIf="authService.userInfo" state="compacted">
     <nb-menu [items]="menuItems"></nb-menu>
   </nb-sidebar>
 
@@ -29,6 +29,14 @@
   </nb-layout-column>
 
   <nb-layout-footer>
-
+    <div class="footer-container">
+      <p>© 2025, JackKábel. All rights reserved.</p>
+      <p>
+        Follow on
+        <nb-icon icon="facebook" pack="eva"></nb-icon>
+        <nb-icon icon="twitter" pack="eva"></nb-icon>
+        <nb-icon icon="linkedin" pack="eva"></nb-icon>
+      </p>
+    </div>
   </nb-layout-footer>
 </nb-layout>

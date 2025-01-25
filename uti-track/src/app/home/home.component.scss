@@ -1,0 +1,33 @@
+.header-container {
+  text-align: center;
+  padding: 1rem;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.teaser-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.5rem;
+}
+
+.teaser-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.progress-container {
+  text-align: center;
+}
+
+.progress-text {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #8f9bb3;
+}

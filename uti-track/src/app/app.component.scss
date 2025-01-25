@@ -16,8 +16,6 @@
   justify-self: right
 }
 
-
-
 .actions {
   display: flex;
   gap: 1rem;
@@ -29,4 +27,15 @@
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
+}
+
+.footer-container {
+  text-align: center;
+  color: white;
+}
+
+.footer-container nb-icon {
+  margin: 0 0.5rem;
+  color: white;
+  cursor: pointer;
 }
