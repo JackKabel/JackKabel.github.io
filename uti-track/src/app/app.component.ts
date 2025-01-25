@@ -1,14 +1,44 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import {Component} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {account, databases} from '../lib/appwrite';
+import {ID, Query} from 'appwrite';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [
+    FormsModule
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.css',
+  standalone: true
 })
 export class AppComponent {
-  title = 'uti-track';
+  title = 'CrowClient';
+  loggedInUser: any = null;
+  email: string = '';
+  password: string = '';
+  name: string = '';
+
+  async login(email: string, password: string) {
+    await account.createEmailPasswordSession(email, password);
+    this.loggedInUser = await account.get();
+  }
+
+  async register(email: string, password: string, name: string) {
+    await account.create(ID.unique(), email, password, name);
+    this.login(email, password);
+  }
+
+  async logout() {
+    await account.deleteSession('current');
+    this.loggedInUser = null;
+  }
+
+  listNames() {
+    databases.listDocuments(
+      '67935fe8002425d5d665',
+      '67935ff4001dc8b5add1',
+      []
+    );
+  }
 }
