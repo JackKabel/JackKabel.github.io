@@ -1,0 +1,18 @@
+<nb-card class="auth-card">
+  <nb-card-header>Authentication</nb-card-header>
+  <nb-card-body>
+    <div class="auth-form">
+      <input nbInput fullWidth type="email" placeholder="Email" [(ngModel)]="email"/>
+      <input nbInput fullWidth type="password" placeholder="Password" [(ngModel)]="password"/>
+
+      <div class="auth-actions">
+        <button *ngIf="authType === 'login'" nbButton status="primary" fullWidth (click)="login(email, password)">
+          Login
+        </button>
+        <button *ngIf="authType === 'register'" nbButton status="success" fullWidth (click)="register(email, password)">
+          Register
+        </button>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

@@ -16,29 +16,7 @@
   justify-self: right
 }
 
-.dates {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
 
-.auth-card {
-  max-width: 500px;
-  margin: auto;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.auth-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
 
 .actions {
   display: flex;

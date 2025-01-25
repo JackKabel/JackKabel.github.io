@@ -2,49 +2,33 @@
   <nb-layout-header>
     <div class="header-content">
       <div class="menu-button-container">
-        <button *ngIf="loggedInUser" nbButton ghost status="primary" (click)="toggleMenu()">
+        <button *ngIf="authService.userInfo" nbButton ghost status="primary" (click)="toggleMenu()">
           <nb-icon icon="menu"></nb-icon>
         </button>
       </div>
       <div class="welcome-message-container">
-        <span>{{ loggedInUser ? 'Logged in as: ' + loggedInUser.email : 'Not logged in' }}</span>
+        <span>{{ authService.userInfo ? 'Welcome ' + authService.userInfo.email + '!' : 'Not logged in' }}</span>
       </div>
       <div class="auth-buttons-container">
-        <button nbButton *ngIf="loggedInUser" status="danger" size="small" (click)="logout()">Logout</button>
-        <div class="auth-buttons" *ngIf="!loggedInUser">
-          <button nbButton status="primary" size="small" (click)="authRequested = {value: true, type: 'login'}">Login</button>
-          <button nbButton status="success" size="small" (click)="authRequested = {value: true, type: 'register'}">Register</button>
+        <button *ngIf="authService.userInfo" nbButton status="danger" size="small" (click)="logout()">Logout</button>
+        <div *ngIf="!authService.userInfo" class="auth-buttons">
+          <button nbButton status="primary" size="small" (click)="login()">Login</button>
+          <button nbButton status="success" size="small" (click)="register()">Register</button>
         </div>
       </div>
     </div>
   </nb-layout-header>
-  <nb-sidebar [state]="loggedInUser ? 'compacted' : 'collapsed'">
+
+
+  <nb-sidebar *ngIf="authService.userInfo">
     <nb-menu [items]="menuItems"></nb-menu>
   </nb-sidebar>
-  <router-outlet></router-outlet>
-  <nb-layout-column>
-    <nb-card class="auth-card" *ngIf="authRequested.value">
-      <nb-card-header>Authentication</nb-card-header>
-      <nb-card-body>
-        <div class="auth-form">
-          <input nbInput fullWidth type="email" placeholder="Email" [(ngModel)]="email"/>
-          <input nbInput fullWidth type="password" placeholder="Password" [(ngModel)]="password"/>
 
-          <div class="auth-actions">
-            <button *ngIf="!loggedInUser && authRequested.value && authRequested.type === 'login'" nbButton status="primary" fullWidth (click)="login(email, password)">
-              Login
-            </button>
-            <button *ngIf="!loggedInUser && authRequested.value && authRequested.type === 'register'" nbButton status="success" fullWidth (click)="register(email, password)">
-              Register
-            </button>
-          </div>
-        </div>
-      </nb-card-body>
-    </nb-card>
-  </nb-layout-column>'
+  <nb-layout-column>
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+
   <nb-layout-footer>
 
   </nb-layout-footer>
-
-
 </nb-layout>

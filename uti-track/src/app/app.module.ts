@@ -19,10 +19,14 @@ import {
 } from "@nebular/theme";
 import {FormsModule} from "@angular/forms";
 import {NbEvaIconsModule} from "@nebular/eva-icons";
+import {AuthComponent} from './auth/auth/auth.component';
+import {HomeComponent} from './home/home.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AuthComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

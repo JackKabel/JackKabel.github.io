@@ -1,17 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {account} from '../lib/appwrite';
-import {ID} from 'appwrite';
+import {Component} from '@angular/core';
 import {NbMenuItem, NbSidebarService} from "@nebular/theme";
+import {AuthService} from "./auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
-  loggedInUser: any = null;
-  email: string = '';
-  password: string = '';
+export class AppComponent {
   menuItems: NbMenuItem[] = [
     {
       title: 'Work calendar',
@@ -19,36 +16,21 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  constructor(private sidebarService: NbSidebarService) {
+  constructor(private sidebarService: NbSidebarService,
+              protected authService: AuthService,
+              private router: Router) {
   }
 
-  _authRequested: { value: boolean, type?: 'login' | 'register' } = {value: false};
-
-  get authRequested() {
-    return this._authRequested;
+  login() {
+    void this.router.navigate(['/auth', 'login'])
   }
 
-  set authRequested(request: { value: boolean, type?: 'login' | 'register' }) {
-    this._authRequested = request;
+  register() {
+    void this.router.navigate(['/auth', 'register'])
   }
 
-  async ngOnInit() {
-    this.loggedInUser = await account.get();
-  }
-
-  async login(email: string, password: string) {
-    await account.createEmailPasswordSession(email, password);
-    this.loggedInUser = await account.get();
-  }
-
-  async register(email: string, password: string) {
-    await account.create(ID.unique(), email, password);
-    this.login(email, password);
-  }
-
-  async logout() {
-    await account.deleteSession('current');
-    this.loggedInUser = null;
+  logout() {
+    void this.authService.logout();
   }
 
   toggleMenu() {
