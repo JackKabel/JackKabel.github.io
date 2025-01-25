@@ -1,31 +1,45 @@
-import {Component} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
 import {account, databases} from '../lib/appwrite';
 import {ID} from 'appwrite';
+import {NbCalendarRange, NbDateService} from "@nebular/theme";
 
 @Component({
   selector: 'app-root',
-  imports: [
-    FormsModule
-  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  standalone: true
 })
-export class AppComponent {
-  title = 'CrowClient';
+export class AppComponent implements OnInit{
   loggedInUser: any = null;
   email: string = '';
   password: string = '';
-  name: string = '';
+  range: NbCalendarRange<Date>;
+
+  constructor(protected dateService: NbDateService<Date>) {
+    this.range = {
+      start: this.dateService.addDay(this.monthStart, 3),
+      end: this.dateService.addDay(this.monthEnd, -3),
+    };
+  }
+
+  get monthStart(): Date {
+    return this.dateService.getMonthStart(new Date());
+  }
+
+  get monthEnd(): Date {
+    return this.dateService.getMonthEnd(new Date());
+  }
+
+  async ngOnInit() {
+    this.loggedInUser = await account.get();
+  }
 
   async login(email: string, password: string) {
     await account.createEmailPasswordSession(email, password);
     this.loggedInUser = await account.get();
   }
 
-  async register(email: string, password: string, name: string) {
-    await account.create(ID.unique(), email, password, name);
+  async register(email: string, password: string) {
+    await account.create(ID.unique(), email, password);
     this.login(email, password);
   }
 
