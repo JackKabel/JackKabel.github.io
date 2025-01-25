@@ -1,34 +1,40 @@
 <nb-layout>
   <nb-layout-header>
     <div class="header-content">
-      <span>{{ loggedInUser ? 'Logged in as ' + loggedInUser.email : 'Not logged in' }}</span>
-      <button nbButton *ngIf="loggedInUser" status="danger" size="small" (click)="logout()">
-        Logout
-      </button>
+      <div class="menu-button-container">
+        <button *ngIf="loggedInUser" nbButton ghost status="primary" (click)="toggleMenu()">
+          <nb-icon icon="menu"></nb-icon>
+        </button>
+      </div>
+      <div class="welcome-message-container">
+        <span>{{ loggedInUser ? 'Logged in as: ' + loggedInUser.email : 'Not logged in' }}</span>
+      </div>
+      <div class="auth-buttons-container">
+        <button nbButton *ngIf="loggedInUser" status="danger" size="small" (click)="logout()">Logout</button>
+        <div class="auth-buttons" *ngIf="!loggedInUser">
+          <button nbButton status="primary" size="small" (click)="authRequested = {value: true, type: 'login'}">Login</button>
+          <button nbButton status="success" size="small" (click)="authRequested = {value: true, type: 'register'}">Register</button>
+        </div>
+      </div>
     </div>
   </nb-layout-header>
-
+  <nb-sidebar [state]="loggedInUser ? 'compacted' : 'collapsed'">
+    <nb-menu [items]="menuItems"></nb-menu>
+  </nb-sidebar>
+  <router-outlet></router-outlet>
   <nb-layout-column>
-    <nb-card *ngIf="loggedInUser">
-      <nb-card-header>
-        <h1 class="h5">Selected range: {{ range.start | date }} - {{ range.end | date }}</h1>
-      </nb-card-header>
-      <nb-card-body>
-        <nb-calendar-range [(range)]="range"></nb-calendar-range>
-      </nb-card-body>
-    </nb-card>
-    <nb-card class="auth-card" *ngIf="!loggedInUser">
-      <nb-card-header>User Authentication</nb-card-header>
+    <nb-card class="auth-card" *ngIf="authRequested.value">
+      <nb-card-header>Authentication</nb-card-header>
       <nb-card-body>
         <div class="auth-form">
           <input nbInput fullWidth type="email" placeholder="Email" [(ngModel)]="email"/>
           <input nbInput fullWidth type="password" placeholder="Password" [(ngModel)]="password"/>
 
           <div class="auth-actions">
-            <button nbButton status="primary" fullWidth (click)="login(email, password)" *ngIf="!loggedInUser">
+            <button *ngIf="!loggedInUser && authRequested.value && authRequested.type === 'login'" nbButton status="primary" fullWidth (click)="login(email, password)">
               Login
             </button>
-            <button nbButton status="success" fullWidth (click)="register(email, password)" *ngIf="!loggedInUser">
+            <button *ngIf="!loggedInUser && authRequested.value && authRequested.type === 'register'" nbButton status="success" fullWidth (click)="register(email, password)">
               Register
             </button>
           </div>
@@ -37,31 +43,8 @@
     </nb-card>
   </nb-layout-column>'
   <nb-layout-footer>
-    <nb-flip-card>
-      <nb-card-front>
-        <nb-card accent="danger">
-          <nb-card-header>
-            <h4>Remaining days</h4>
-          </nb-card-header>
-          <nb-card-body>
-            <p>25</p>
-          </nb-card-body>
-        </nb-card>
-      </nb-card-front>
-      <nb-card-back>
-        <nb-card accent="info">
-          <nb-card-header>
-            <h4>Available days</h4>
-          </nb-card-header>
-          <nb-card-body>
-            <p>Total: 21</p>
-            <p>Used: 4</p>
-            <p>Remaining: 9</p>
-          </nb-card-body>
-        </nb-card>
-      </nb-card-back>
-    </nb-flip-card>
+
   </nb-layout-footer>
-  <nb-sidebar></nb-sidebar>
+
 
 </nb-layout>

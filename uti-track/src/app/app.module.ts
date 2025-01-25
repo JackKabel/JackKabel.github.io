@@ -13,6 +13,7 @@ import {
   NbIconModule,
   NbInputModule,
   NbLayoutModule,
+  NbMenuModule,
   NbSidebarModule,
   NbThemeModule
 } from "@nebular/theme";
@@ -28,6 +29,7 @@ import {NbEvaIconsModule} from "@nebular/eva-icons";
     RouterModule.forRoot(routes),
     NbThemeModule.forRoot({name: 'dark'}),
     NbSidebarModule.forRoot(),
+    NbMenuModule.forRoot(),
     NbButtonModule,
     NbCardModule,
     NbIconModule,
@@ -37,6 +39,7 @@ import {NbEvaIconsModule} from "@nebular/eva-icons";
     NbInputModule,
     NbCalendarModule,
     NbCalendarRangeModule,
+    NbMenuModule,
   ],
   providers: [
     provideAnimationsAsync(),

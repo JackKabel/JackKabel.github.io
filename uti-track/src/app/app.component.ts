@@ -1,32 +1,35 @@
 import {Component, OnInit} from '@angular/core';
-import {account, databases} from '../lib/appwrite';
+import {account} from '../lib/appwrite';
 import {ID} from 'appwrite';
-import {NbCalendarRange, NbDateService} from "@nebular/theme";
+import {NbMenuItem, NbSidebarService} from "@nebular/theme";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   loggedInUser: any = null;
   email: string = '';
   password: string = '';
-  range: NbCalendarRange<Date>;
+  menuItems: NbMenuItem[] = [
+    {
+      title: 'Work calendar',
+      icon: 'calendar-outline',
+    },
+  ];
 
-  constructor(protected dateService: NbDateService<Date>) {
-    this.range = {
-      start: this.dateService.addDay(this.monthStart, 3),
-      end: this.dateService.addDay(this.monthEnd, -3),
-    };
+  constructor(private sidebarService: NbSidebarService) {
   }
 
-  get monthStart(): Date {
-    return this.dateService.getMonthStart(new Date());
+  _authRequested: { value: boolean, type?: 'login' | 'register' } = {value: false};
+
+  get authRequested() {
+    return this._authRequested;
   }
 
-  get monthEnd(): Date {
-    return this.dateService.getMonthEnd(new Date());
+  set authRequested(request: { value: boolean, type?: 'login' | 'register' }) {
+    this._authRequested = request;
   }
 
   async ngOnInit() {
@@ -48,11 +51,7 @@ export class AppComponent implements OnInit{
     this.loggedInUser = null;
   }
 
-  listNames() {
-    databases.listDocuments(
-      '67935fe8002425d5d665',
-      '67935ff4001dc8b5add1',
-      []
-    );
+  toggleMenu() {
+    this.sidebarService.toggle(true);
   }
 }
