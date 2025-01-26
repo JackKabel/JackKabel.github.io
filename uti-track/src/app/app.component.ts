@@ -13,6 +13,7 @@ export class AppComponent {
     {
       title: 'Work calendar',
       icon: 'calendar-outline',
+      link: '/calendar',
     },
   ];
 

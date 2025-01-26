@@ -23,12 +23,14 @@ import {FormsModule} from "@angular/forms";
 import {NbEvaIconsModule} from "@nebular/eva-icons";
 import {AuthComponent} from './auth/auth/auth.component';
 import {HomeComponent} from './home/home.component';
+import {CalendarComponent} from './calendar/calendar/calendar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    HomeComponent
+    HomeComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,

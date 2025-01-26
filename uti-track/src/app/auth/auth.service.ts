@@ -28,8 +28,7 @@ export class AuthService {
    */
   async checkSession(): Promise<void> {
     try {
-      const user = await this.account.get();
-      this.userInfo = user;
+      this.userInfo = await this.account.get();
       this._isLoggedIn$.next(true);
     } catch {
       this.userInfo = null;
