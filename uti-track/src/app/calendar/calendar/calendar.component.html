@@ -1,24 +1,22 @@
 <div class="calendar-container">
+  <div class="calendar-week-view">
+    <div class="day-card" *ngFor="let day of week">
+      <nb-alert status="danger">{{ day.date | date: 'dd' }}</nb-alert>
+      <h3>{{ day.date | date: 'MMM' }}</h3>
+      <div *ngIf="checkRequests(day)" class="users">
+        <div *ngFor="let req of day.requests" class="user">
+          <nb-user size="tiny" [name]="req.user_name"></nb-user>
+          <button nbButton size="tiny" (click)="revokeFreeDay(req.$id)"><nb-icon icon="close"></nb-icon></button>
+        </div>
+      </div>
+      <button *ngIf="!checkDay(day.requests)" nbButton (click)="sendRequest(day)">
+        <nb-icon icon="calendar-outline"></nb-icon>
+      </button>
+    </div>
+  </div>
   <div class="calendar-header">
     <button nbButton status="primary" (click)="goToPreviousWeek()">Previous Week</button>
     <h3>{{ currentWeekRange }}</h3>
     <button nbButton status="primary" (click)="goToNextWeek()">Next Week</button>
-  </div>
-
-  <div class="calendar-week-view" #scrollableWeek>
-    <div class="day-card" *ngFor="let day of week">
-      <div class="day-info">
-        <h4>{{ day.date | date: 'MMMM d, EEEE' }}</h4>
-        <i>{{ day.isHoliday ? 'Holiday' : 'Workday' }}</i>
-      </div>
-      <button
-        nbButton
-        [status]="day.requested ? 'warning' : 'success'"
-        [disabled]="day.isHoliday"
-        (click)="day.requested ? revokeFreeDay(day.date) : requestFreeDay(day.date)">
-        <nb-icon *ngIf="!day.requested" icon="calendar-outline"></nb-icon>
-        <nb-icon *ngIf="day.requested" icon="done-all-outline"></nb-icon>
-      </button>
-    </div>
   </div>
 </div>

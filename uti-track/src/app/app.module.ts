@@ -17,7 +17,8 @@ import {
   NbMenuModule,
   NbProgressBarModule,
   NbSidebarModule,
-  NbThemeModule
+  NbThemeModule,
+  NbUserModule
 } from "@nebular/theme";
 import {FormsModule} from "@angular/forms";
 import {NbEvaIconsModule} from "@nebular/eva-icons";
@@ -30,7 +31,7 @@ import {CalendarComponent} from './calendar/calendar/calendar.component';
     AppComponent,
     AuthComponent,
     HomeComponent,
-    CalendarComponent
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +51,7 @@ import {CalendarComponent} from './calendar/calendar/calendar.component';
     NbMenuModule,
     NbProgressBarModule,
     NbAlertModule,
+    NbUserModule,
   ],
   providers: [
     provideAnimationsAsync(),
@@ -58,4 +60,5 @@ import {CalendarComponent} from './calendar/calendar/calendar.component';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}

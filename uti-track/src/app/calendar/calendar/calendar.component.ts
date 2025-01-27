@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {CalendarService} from "../calendar.service";
+import {AuthService} from "../../auth/auth.service";
+import {RealtimeResponseEvent} from "appwrite";
 
 @Component({
   selector: 'app-calendar',
@@ -7,16 +9,37 @@ import {CalendarService} from "../calendar.service";
   styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent implements OnInit {
+  private calendarCollectionId = '67965aa7000d0bef581d';
   currentDate: Date = new Date();
-  week: { date: Date; isHoliday: boolean; requested: boolean }[] = [];
-  requests: any[] = [];
+  week: { $id: string; date: Date; dayOfWeek: string; isHoliday: boolean; requests: any[];}[] = [];
   currentWeekRange: string = '';
 
-  constructor(private calendarService: CalendarService) {}
+  constructor(private calendarService: CalendarService,
+              private authService: AuthService,
+              private cdr: ChangeDetectorRef) {
+
+  }
 
   ngOnInit(): void {
     this.getCalendarRecords();
-    this.getRequests();
+    this.realtimeConnect();
+  }
+
+  realtimeConnect() {
+    this.authService.client.subscribe(`databases.67935fe8002425d5d665.collections.67965aa7000d0bef581d.documents`, (response: RealtimeResponseEvent<any>) => {
+      const updatedId = response.payload.$id;
+      console.log(response)
+      this.week = this.week.map(item =>
+        item.$id === updatedId ? { ...item, ...response.payload } : item
+      );
+    });
+
+    this.authService.client.subscribe(`databases.67935fe8002425d5d665.collections.67965b8d0013eea83d4c.documents`, (response: RealtimeResponseEvent<any>) => {
+      const updatedId = response.payload.calendar_id;
+      this.week = this.week.map(item =>
+        item.$id === updatedId ? { ...item, ...response.payload } : item
+      );
+    });
   }
 
   getPreviousAndNextWeekRange(currentDate: Date): { previousWeekStart: Date; nextWeekEnd: Date } {
@@ -34,53 +57,27 @@ export class CalendarComponent implements OnInit {
     nextWeekEnd.setHours(23, 59, 59, 999); // Go forward to next week's Sunday
 
     // Return both dates
-    return { previousWeekStart, nextWeekEnd };
+    return {previousWeekStart, nextWeekEnd};
   }
 
-  /**
-   * Navigate to the previous week.
-   */
   goToPreviousWeek(): void {
     const previousWeek = new Date(this.currentDate);
     previousWeek.setDate(this.currentDate.getDate() - 7);
     this.currentDate = previousWeek;
   }
 
-  /**
-   * Navigate to the next week.
-   */
   goToNextWeek(): void {
     const nextWeek = new Date(this.currentDate);
     nextWeek.setDate(this.currentDate.getDate() + 7);
     this.currentDate = nextWeek;
   }
 
-  /**
-   * Request a free day by sending it to the CalendarService.
-   */
-  requestFreeDay(date: Date): void {
-    this.calendarService.requestFreeDay(date).then(() => {
-      console.log('Free day requested for', date);
-      const day = this.week.find((d) => d.date.toDateString() === date.toDateString());
-      if (day) {
-        day.requested = true;
-      }
-    });
+  sendRequest(id: any): void {
+    void this.calendarService.requestFreeDay(id)
   }
 
-  revokeFreeDay(date: Date) {
-    // this.calendarService.revokeFreeDay().then(() => {
-    //   console.log('Free day revoked');
-    // });
-  }
-
-  /**
-   * Get the start of the week for the given date.
-   */
-  private getStartOfWeek(date: Date): Date {
-    const day = date.getDay(); // 0 (Sunday) to 6 (Saturday)
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-    return new Date(date.setDate(diff));
+  revokeFreeDay(id: string) {
+    void this.calendarService.revokeFreeDay(id)
   }
 
   getCalendarRecords(): void {
@@ -88,14 +85,18 @@ export class CalendarComponent implements OnInit {
       this.getPreviousAndNextWeekRange(new Date()).previousWeekStart,
       this.getPreviousAndNextWeekRange(new Date()).nextWeekEnd)
       .then((response) => {
-      this.week = response
-    })
+        this.week = response
+      })
   }
 
-  getRequests(): void {
-    this.calendarService.getFreeDayRequests()
-      .then((response) => {
-        this.requests = response;
-      })
+  checkDay(requests: any[]) {
+    const requestForThisDay = requests.find((req) => {
+      return req.user_id === this.authService.userInfo.$id;
+    });
+    return !!requestForThisDay;
+  }
+
+  checkRequests(dayToCheck: any) {
+    return dayToCheck.requests.length > 0
   }
 }

@@ -8,12 +8,12 @@ import {AuthService} from "../auth/auth.service";
 export class CalendarService {
   private client: Client;
   private databases: Databases;
-  private databaseId = '67935fe8002425d5d665'; // Replace with your Appwrite database ID
-  private calendarCollectionId = '67965aa7000d0bef581d'; // Replace with your Calendar collection ID
-  private freeDaysCollectionId = '67965b8d0013eea83d4c'
+
+  private databaseId = '67935fe8002425d5d665';
+  private calendarCollectionId = '67965aa7000d0bef581d';
+  private requestsCollectionId = '67965b8d0013eea83d4c'
 
   constructor(private authService: AuthService) {
-    // Use the same client as the AuthService
     this.client = new Client();
     this.databases = new Databases(this.client);
 
@@ -22,9 +22,6 @@ export class CalendarService {
       .setProject('67935c27000be545cecf'); // Replace with your Appwrite project ID
   }
 
-  /**
-   * Prepopulates the calendar for a given year.
-   */
   async prepopulateCalendar(year: number): Promise<void> {
     try {
       const dates = this.getAllDatesForYear(year);
@@ -56,23 +53,6 @@ export class CalendarService {
     }
   }
 
-  /**
-   * Fetches all dates from the calendar collection.
-   */
-  async getCalendar(): Promise<any[]> {
-    try {
-      const response = await this.databases.listDocuments(this.databaseId, this.calendarCollectionId);
-      console.log('Calendar data:', response.documents);
-      return response.documents;
-    } catch (error) {
-      console.error('Error fetching calendar data:', error);
-      return [];
-    }
-  }
-
-  /**
-   * Utility function to generate all dates for a year.
-   */
   private getAllDatesForYear(year: number): { date: Date; dayOfWeek: string; isHoliday: boolean }[] {
     const dates: { date: Date; dayOfWeek: string; isHoliday: boolean }[] = [];
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -92,29 +72,6 @@ export class CalendarService {
     return dates;
   }
 
-  async requestFreeDay(date: Date): Promise<void> {
-    try {
-      const formattedDate = date.toISOString().split('T')[0];
-
-      // Add the free day request to the database
-      await this.databases.createDocument(
-        this.databaseId,
-        'free_days', // Replace with your free_days collection ID
-        ID.unique(),
-        { date: formattedDate, userId: this.authService.userInfo.$id }
-      );
-
-      console.log(`Free day requested successfully for ${formattedDate}`);
-    } catch (error) {
-      console.error('Error requesting free day:', error);
-    }
-  }
-
-  /**
-   * Fetches calendar events between two dates
-   * @param from - start date
-   * @param to - end date
-   */
   async getCalendarEvents(from: Date, to: Date): Promise<any> {
     try {
       const response = await this.databases.listDocuments(
@@ -132,16 +89,36 @@ export class CalendarService {
     }
   }
 
-  async getFreeDayRequests(): Promise<any> {
+  async requestFreeDay(day: any): Promise<void> {
     try {
-      const response = await this.databases.listDocuments(
+      await this.databases.updateDocument(
         this.databaseId,
-        this.freeDaysCollectionId
+        this.calendarCollectionId,
+        day.$id,
+        { requests: [
+            {
+              user_id: this.authService.userInfo.$id,
+              user_name: this.authService.userInfo.name,
+              date: day.date,
+              calendar_id: day.$id
+            }
+          ]
+        }
       );
-      return response.documents;
     } catch (error) {
-      console.error('Error fetching free day requests:', error);
-      return [];
+      console.error('Error requesting free day:', error);
+    }
+  }
+
+  async revokeFreeDay(documentId: string): Promise<void> {
+    try {
+      await this.databases.deleteDocument(
+        this.databaseId,
+        this.requestsCollectionId,
+        documentId
+      );
+    } catch (error) {
+      console.error('Error revoking free day:', error);
     }
   }
 
