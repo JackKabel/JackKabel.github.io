@@ -20,7 +20,6 @@ export class CalendarComponent implements OnInit {
   currentDate: Date = new Date();
   week: CalendarDay[] = [];
   currentWeekRange: string = '';
-  private calendarCollectionId = '67965aa7000d0bef581d';
 
   constructor(private calendarService: CalendarService,
               private authService: AuthService) {
@@ -50,22 +49,22 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  getPreviousAndNextWeekRange(currentDate: Date): { previousWeekStart: Date; nextWeekEnd: Date } {
+  getDateRanges(currentDate: Date): { thisWeekMonday: Date; nextNextWeekSunday: Date } {
     const currentDay = currentDate.getDay(); // Get current day of the week (0: Sunday, 6: Saturday)
     const diffToMonday = currentDay === 0 ? 6 : currentDay - 1; // Calculate days since Monday (Monday = 0)
 
-    // Calculate the first day of the previous week (Monday)
-    const previousWeekStart = new Date(currentDate);
-    previousWeekStart.setDate(currentDate.getDate() - diffToMonday - 7); // Go back to the previous week's Monday
-    previousWeekStart.setHours(0, 0, 0, 0); // Go back to the previous week's Monday
+    // Calculate the first day of this week (Monday)
+    const thisWeekMonday = new Date(currentDate);
+    thisWeekMonday.setDate(currentDate.getDate() - diffToMonday); // Go back to this week's Monday
+    thisWeekMonday.setHours(0, 0, 0, 0); // Reset time to the start of the day
 
-    // Calculate the last day of the next week (Sunday)
-    const nextWeekEnd = new Date(currentDate);
-    nextWeekEnd.setDate(currentDate.getDate() + (7 - diffToMonday) + 6); // Go forward to next week's Sunday
-    nextWeekEnd.setHours(23, 59, 59, 999); // Go forward to next week's Sunday
+    // Calculate the last day of the week after the following week (Sunday)
+    const nextNextWeekSunday = new Date(currentDate);
+    nextNextWeekSunday.setDate(currentDate.getDate() + (7 - diffToMonday) + 13); // Move forward to the Sunday after the next week
+    nextNextWeekSunday.setHours(23, 59, 59, 999); // Set time to the end of the day
 
     // Return both dates
-    return {previousWeekStart, nextWeekEnd};
+    return { thisWeekMonday, nextNextWeekSunday };
   }
 
   goToPreviousWeek(): void {
@@ -91,8 +90,8 @@ export class CalendarComponent implements OnInit {
 
   getCalendarRecords(): void {
     this.calendarService.getCalendarEvents(
-      this.getPreviousAndNextWeekRange(new Date()).previousWeekStart,
-      this.getPreviousAndNextWeekRange(new Date()).nextWeekEnd)
+      this.getDateRanges(new Date()).thisWeekMonday,
+      this.getDateRanges(new Date()).nextNextWeekSunday)
       .then((response) => {
         this.week = response
       })
