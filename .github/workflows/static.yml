@@ -47,6 +47,9 @@ jobs:
         run: npm run build --prod
         working-directory: uti-track
 
+      - name: Generate 404.html
+        run: npm run postbuild
+        working-directory: uti-track
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
