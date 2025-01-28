@@ -35,7 +35,7 @@ import {CalendarComponent} from './calendar/calendar/calendar.component';
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { useHash: true }),
     NbThemeModule.forRoot({name: 'dark'}),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
