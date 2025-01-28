@@ -91,11 +91,18 @@ export class CalendarService {
 
   async requestFreeDay(day: any): Promise<void> {
     try {
+      const calendarDay = await this.databases.getDocument(
+        this.databaseId,
+        this.calendarCollectionId,
+        day.$id,
+      );
+
       await this.databases.updateDocument(
         this.databaseId,
         this.calendarCollectionId,
         day.$id,
         { requests: [
+            ...calendarDay['requests'],
             {
               user_id: this.authService.userInfo.$id,
               user_name: this.authService.userInfo.name,

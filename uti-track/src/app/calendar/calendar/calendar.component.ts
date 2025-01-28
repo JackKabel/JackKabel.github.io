@@ -99,4 +99,8 @@ export class CalendarComponent implements OnInit {
   checkRequests(dayToCheck: any) {
     return dayToCheck.requests.length > 0
   }
+
+  isMyRequest(request: any) {
+    return request.user_id === this.authService.userInfo.$id
+  }
 }

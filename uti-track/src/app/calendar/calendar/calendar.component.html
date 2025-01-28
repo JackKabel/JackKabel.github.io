@@ -6,7 +6,7 @@
       <div *ngIf="checkRequests(day)" class="users">
         <div *ngFor="let req of day.requests" class="user">
           <nb-user size="tiny" [name]="req.user_name"></nb-user>
-          <button nbButton size="tiny" (click)="revokeFreeDay(req.$id)"><nb-icon icon="close"></nb-icon></button>
+          <button *ngIf="isMyRequest(req)" nbButton size="tiny" (click)="revokeFreeDay(req.$id)"><nb-icon icon="close"></nb-icon></button>
         </div>
       </div>
       <button *ngIf="!checkDay(day.requests)" nbButton (click)="sendRequest(day)">

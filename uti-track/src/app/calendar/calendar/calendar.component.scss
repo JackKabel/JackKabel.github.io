@@ -30,6 +30,7 @@
 
     nb-alert {
       font-size: 2rem;
+      margin: 0;
       color: var(--color-danger-default); // Alert with danger tone
     }
 
@@ -45,6 +46,9 @@
       padding: 0.5rem;
       background: rgba(240, 248, 255, 0.1);
       grid-column: span 3;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .user {
