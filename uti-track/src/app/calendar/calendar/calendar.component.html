@@ -18,9 +18,21 @@
       </button>
     </nb-card>
   </div>
-  <div class="steppers">
-    <button nbButton status="primary" (click)="goToPreviousWeek()">Previous Week</button>
-    <h3>{{ currentWeekRange }}</h3>
-    <button nbButton status="primary" (click)="goToNextWeek()">Next Week</button>
-  </div>
+  <nb-card accent="success">
+      <div class="days-summary">
+        <div class="summary-item">
+          <h6>Total Days</h6>
+          <p>{{ totalDays }}</p>
+        </div>
+        <div class="summary-item">
+          <h6>Days Used</h6>
+          <p>{{ usedDays }}</p>
+        </div>
+        <div class="summary-item">
+          <h6>Available Days</h6>
+          <p>{{ availableDays }}</p>
+        </div>
+      </div>
+  </nb-card>
 </div>
+

@@ -19,7 +19,9 @@ export interface CalendarDay {
 export class CalendarComponent implements OnInit {
   currentDate: Date = new Date();
   week: CalendarDay[] = [];
-  currentWeekRange: string = '';
+  totalDays: number = 20; // Example: Total allowed days
+  usedDays: number = 0;  // Days already used
+  availableDays: number = 0; // Calculated as totalDays - usedDays
 
   constructor(private calendarService: CalendarService,
               private authService: AuthService) {
