@@ -35,6 +35,6 @@ export class AppComponent {
   }
 
   toggleMenu() {
-    this.sidebarService.toggle(true);
+    this.sidebarService.toggle(false);
   }
 }

@@ -1,7 +1,15 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CalendarService} from "../calendar.service";
 import {AuthService} from "../../auth/auth.service";
 import {RealtimeResponseEvent} from "appwrite";
+
+export interface CalendarDay {
+  $id: string;
+  date: Date;
+  dayOfWeek: string;
+  isHoliday: boolean;
+  requests: any[];
+}
 
 @Component({
   selector: 'app-calendar',
@@ -9,14 +17,13 @@ import {RealtimeResponseEvent} from "appwrite";
   styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent implements OnInit {
-  private calendarCollectionId = '67965aa7000d0bef581d';
   currentDate: Date = new Date();
-  week: { $id: string; date: Date; dayOfWeek: string; isHoliday: boolean; requests: any[];}[] = [];
+  week: CalendarDay[] = [];
   currentWeekRange: string = '';
+  private calendarCollectionId = '67965aa7000d0bef581d';
 
   constructor(private calendarService: CalendarService,
-              private authService: AuthService,
-              private cdr: ChangeDetectorRef) {
+              private authService: AuthService) {
 
   }
 
@@ -28,17 +35,18 @@ export class CalendarComponent implements OnInit {
   realtimeConnect() {
     this.authService.client.subscribe(`databases.67935fe8002425d5d665.collections.67965aa7000d0bef581d.documents`, (response: RealtimeResponseEvent<any>) => {
       const updatedId = response.payload.$id;
-      console.log(response)
       this.week = this.week.map(item =>
-        item.$id === updatedId ? { ...item, ...response.payload } : item
+        item.$id === updatedId ? {...item, ...response.payload} : item
       );
     });
 
     this.authService.client.subscribe(`databases.67935fe8002425d5d665.collections.67965b8d0013eea83d4c.documents`, (response: RealtimeResponseEvent<any>) => {
-      const updatedId = response.payload.calendar_id;
-      this.week = this.week.map(item =>
-        item.$id === updatedId ? { ...item, ...response.payload } : item
-      );
+      const requestToRemove = response.payload
+      this.week.forEach(day => {
+        if (day.$id === requestToRemove.calendar_id) {
+          day.requests = day.requests.filter((request: any) => request.$id !== requestToRemove.$id);
+        }
+      })
     });
   }
 
@@ -76,8 +84,9 @@ export class CalendarComponent implements OnInit {
     void this.calendarService.requestFreeDay(id)
   }
 
-  revokeFreeDay(id: string) {
-    void this.calendarService.revokeFreeDay(id)
+  revokeFreeDay(day: any) {
+    const usersRequest = day.requests.find((req: any) => req.user_id === this.authService.userInfo.$id)
+    void this.calendarService.revokeFreeDay(usersRequest.$id)
   }
 
   getCalendarRecords(): void {
@@ -96,11 +105,15 @@ export class CalendarComponent implements OnInit {
     return !!requestForThisDay;
   }
 
-  checkRequests(dayToCheck: any) {
-    return dayToCheck.requests.length > 0
-  }
+  isToday(day: CalendarDay): boolean {
+    const givenDate = new Date(day.date); // Convert to a Date object (if it's not already)
+    const today = new Date(); // Current date
 
-  isMyRequest(request: any) {
-    return request.user_id === this.authService.userInfo.$id
+    // Strip the time portion from both dates
+    givenDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    // Compare the stripped dates
+    return givenDate.getTime() === today.getTime();
   }
 }

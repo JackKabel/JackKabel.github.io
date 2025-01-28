@@ -9,6 +9,7 @@
 }
 
 .welcome-message-container {
+  text-align: center;
   justify-self: center
 }
 
@@ -31,11 +32,6 @@
 
 .footer-container {
   text-align: center;
-  color: white;
+  color: lightgray;
 }
 
-.footer-container nb-icon {
-  margin: 0 0.5rem;
-  color: white;
-  cursor: pointer;
-}

@@ -3,78 +3,38 @@
   padding: 1rem;
 }
 
-.calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .calendar-week-view {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(3, 1fr);
   overflow-x: auto;
   gap: 0.5rem;
+}
 
-  .day-card {
-    border-radius: 0.25rem;
-    border: 1px solid white;
-    padding: 0.5rem;
-    text-align: center;
-    display: grid;
-    place-items: center;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr auto;
-    background-color: var(--background-basic-color-1); // Slightly lighter tone for day cards
-    box-shadow: var(--shadow); // Use default shadow for depth
+nb-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    nb-alert {
-      font-size: 2rem;
-      margin: 0;
-      color: var(--color-danger-default); // Alert with danger tone
-    }
+nb-card-body {
+  height: 100%;
+  padding: 0.5rem;
+}
 
-    h3 {
-      grid-column: 3/4;
-      color: var(--color-primary-light); // Light primary for month
-      margin: 0 0 5px;
-    }
+nb-alert {
+  font-size: 2rem;
+  margin: 0;
+}
 
-    .users {
-      width: 100%;
-      border-radius: 0.25rem;
-      padding: 0.5rem;
-      background: rgba(240, 248, 255, 0.1);
-      grid-column: span 3;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
+.user-chip {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
 
-    .user {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    button {
-      grid-column: 3/4;
-      grid-row: 3/4;
-      align-self: end;
-      justify-self: end;
-
-      &[status='success'] {
-        background-color: var(--color-success-default); // Success button
-      }
-
-      &[status='warning'] {
-        background-color: var(--color-warning-default); // Warning button
-      }
-
-      &[disabled] {
-        background-color: var(--background-basic-color-4); // Muted tone for disabled
-        color: var(--text-disabled-color); // Disabled text
-      }
-    }
-  }
+.steppers {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

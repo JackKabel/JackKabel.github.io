@@ -1,20 +1,24 @@
 <div class="calendar-container">
   <div class="calendar-week-view">
-    <div class="day-card" *ngFor="let day of week">
-      <nb-alert status="danger">{{ day.date | date: 'dd' }}</nb-alert>
-      <h3>{{ day.date | date: 'MMM' }}</h3>
-      <div *ngIf="checkRequests(day)" class="users">
-        <div *ngFor="let req of day.requests" class="user">
+    <nb-card accent="info" [status]="isToday(day) ? 'info' : 'basic'" *ngFor="let day of week">
+      <nb-card-header>
+        <span>{{ day.date | date: 'dd' }}</span>
+        <span>{{ day.date | date: 'MMM' }}</span>
+      </nb-card-header>
+      <nb-card-body>
+        <div *ngFor="let req of day.requests" class="user-chip">
           <nb-user size="tiny" [name]="req.user_name"></nb-user>
-          <button *ngIf="isMyRequest(req)" nbButton size="tiny" (click)="revokeFreeDay(req.$id)"><nb-icon icon="close"></nb-icon></button>
         </div>
-      </div>
-      <button *ngIf="!checkDay(day.requests)" nbButton (click)="sendRequest(day)">
-        <nb-icon icon="calendar-outline"></nb-icon>
+      </nb-card-body>
+      <button *ngIf="!checkDay(day.requests)" nbButton ghost (click)="sendRequest(day)">
+        <nb-icon status="warning" icon="calendar-outline"></nb-icon>
       </button>
-    </div>
+      <button *ngIf="checkDay(day.requests)" nbButton ghost (click)="revokeFreeDay(day)">
+        <nb-icon status="warning" icon="close"></nb-icon>
+      </button>
+    </nb-card>
   </div>
-  <div class="calendar-header">
+  <div class="steppers">
     <button nbButton status="primary" (click)="goToPreviousWeek()">Previous Week</button>
     <h3>{{ currentWeekRange }}</h3>
     <button nbButton status="primary" (click)="goToNextWeek()">Next Week</button>

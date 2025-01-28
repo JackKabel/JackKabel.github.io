@@ -53,25 +53,6 @@ export class CalendarService {
     }
   }
 
-  private getAllDatesForYear(year: number): { date: Date; dayOfWeek: string; isHoliday: boolean }[] {
-    const dates: { date: Date; dayOfWeek: string; isHoliday: boolean }[] = [];
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-    for (let month = 0; month < 12; month++) {
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(year, month, day);
-        const dayOfWeek = daysOfWeek[date.getDay()];
-        const isHoliday = dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday';
-
-        dates.push({date, dayOfWeek, isHoliday});
-      }
-    }
-
-    return dates;
-  }
-
   async getCalendarEvents(from: Date, to: Date): Promise<any> {
     try {
       const response = await this.databases.listDocuments(
@@ -101,7 +82,8 @@ export class CalendarService {
         this.databaseId,
         this.calendarCollectionId,
         day.$id,
-        { requests: [
+        {
+          requests: [
             ...calendarDay['requests'],
             {
               user_id: this.authService.userInfo.$id,
@@ -127,6 +109,25 @@ export class CalendarService {
     } catch (error) {
       console.error('Error revoking free day:', error);
     }
+  }
+
+  private getAllDatesForYear(year: number): { date: Date; dayOfWeek: string; isHoliday: boolean }[] {
+    const dates: { date: Date; dayOfWeek: string; isHoliday: boolean }[] = [];
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    for (let month = 0; month < 12; month++) {
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dayOfWeek = daysOfWeek[date.getDay()];
+        const isHoliday = dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday';
+
+        dates.push({date, dayOfWeek, isHoliday});
+      }
+    }
+
+    return dates;
   }
 
 }
