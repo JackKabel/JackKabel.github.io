@@ -26,10 +26,6 @@ export class AppComponent {
     void this.router.navigate(['/auth', 'login'])
   }
 
-  register() {
-    void this.router.navigate(['/auth', 'register'])
-  }
-
   logout() {
     void this.authService.logout();
   }

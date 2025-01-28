@@ -2,6 +2,7 @@
   <nb-card-header>Authentication</nb-card-header>
   <nb-card-body>
     <div class="auth-form">
+      <input *ngIf="authType === 'register'" nbInput fullWidth type="text" placeholder="Name" [(ngModel)]="name"/>
       <input nbInput fullWidth type="email" placeholder="Email" [(ngModel)]="email"/>
       <input nbInput fullWidth type="password" placeholder="Password" [(ngModel)]="password"/>
 
@@ -9,8 +10,17 @@
         <button *ngIf="authType === 'login'" nbButton status="primary" fullWidth (click)="login(email, password)">
           Login
         </button>
-        <button *ngIf="authType === 'register'" nbButton status="success" fullWidth (click)="register(email, password)">
+        <button *ngIf="authType === 'register'" nbButton status="success" fullWidth (click)="register(name, email, password)">
           Register
+        </button>
+      </div>
+
+      <div class="disclaimer">
+        <button *ngIf="authType === 'login'" nbButton status="basic" size="tiny" ghost (click)="authType = 'register'">
+          <span>Or click here to register</span>
+        </button>
+        <button *ngIf="authType === 'register'" nbButton status="basic" size="tiny" ghost (click)="authType = 'login'">
+          <span>Back to login</span>
         </button>
       </div>
     </div>

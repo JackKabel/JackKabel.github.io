@@ -7,6 +7,7 @@ import {AuthService} from "../auth.service";
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
+  name: string = '';
   email: string = '';
   password: string = '';
   @Input()
@@ -18,7 +19,7 @@ export class AuthComponent {
     void this.authService.login(email, password);
   }
 
-  register(email: string, password: string) {
-    void this.authService.register(email, password);
+  register(name: string, email: string, password: string) {
+    void this.authService.register(name, email, password);
   }
 }

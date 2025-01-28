@@ -59,9 +59,9 @@ export class AuthService {
   /**
    * Registers a new user.
    */
-  async register(email: string, password: string): Promise<void> {
+  async register(name: string, email: string, password: string): Promise<void> {
     try {
-      const user = await this.account.create(ID.unique(), email, password);
+      const user = await this.account.create(ID.unique(), email, password, name);
       console.log('Registration successful:', user);
     } catch (error) {
       console.error('Registration failed:', error);
