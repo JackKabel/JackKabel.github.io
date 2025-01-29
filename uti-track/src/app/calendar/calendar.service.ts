@@ -11,7 +11,8 @@ export class CalendarService {
 
   private databaseId = '67935fe8002425d5d665';
   private calendarCollectionId = '67965aa7000d0bef581d';
-  private requestsCollectionId = '67965b8d0013eea83d4c'
+  private requestsCollectionId = '67965b8d0013eea83d4c';
+  private summaryCollectionId = '679a0b57003ac00cbd94';
 
   constructor(private authService: AuthService) {
     this.client = new Client();
@@ -70,6 +71,19 @@ export class CalendarService {
     }
   }
 
+  async getUserSummary(): Promise<any> {
+    try {
+      return await this.databases.getDocument(
+        this.databaseId,
+        this.summaryCollectionId,
+        this.authService.userInfo.$id
+      );
+    } catch (error) {
+      console.error('Error fetching user summary:', error);
+      return null;
+    }
+  }
+
   async requestFreeDay(day: any): Promise<void> {
     try {
       const calendarDay = await this.databases.getDocument(
@@ -89,7 +103,8 @@ export class CalendarService {
               user_id: this.authService.userInfo.$id,
               user_name: this.authService.userInfo.name,
               date: day.date,
-              calendar_id: day.$id
+              calendar_id: day.$id,
+              userFreeDaysSummary: this.authService.userInfo.$id
             }
           ]
         }

@@ -19,9 +19,9 @@ export interface CalendarDay {
 export class CalendarComponent implements OnInit {
   currentDate: Date = new Date();
   week: CalendarDay[] = [];
-  totalDays: number = 20; // Example: Total allowed days
-  usedDays: number = 0;  // Days already used
-  availableDays: number = 0; // Calculated as totalDays - usedDays
+  totalDays?: number;
+  usedDays?: number;
+  availableDays?: number;
 
   constructor(private calendarService: CalendarService,
               private authService: AuthService) {
@@ -31,16 +31,26 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     this.getCalendarRecords();
     this.realtimeConnect();
+    this.getUserSummary();
   }
 
   realtimeConnect() {
+    this.requestRT();
+    this.revokeRT()
+  }
+
+  requestRT() {
     this.authService.client.subscribe(`databases.67935fe8002425d5d665.collections.67965aa7000d0bef581d.documents`, (response: RealtimeResponseEvent<any>) => {
       const updatedId = response.payload.$id;
       this.week = this.week.map(item =>
         item.$id === updatedId ? {...item, ...response.payload} : item
       );
+      -- this.availableDays!;
+      ++ this.usedDays!;
     });
+  }
 
+  revokeRT() {
     this.authService.client.subscribe(`databases.67935fe8002425d5d665.collections.67965b8d0013eea83d4c.documents`, (response: RealtimeResponseEvent<any>) => {
       const requestToRemove = response.payload
       this.week.forEach(day => {
@@ -48,6 +58,8 @@ export class CalendarComponent implements OnInit {
           day.requests = day.requests.filter((request: any) => request.$id !== requestToRemove.$id);
         }
       })
+      ++ this.availableDays!;
+      -- this.usedDays!;
     });
   }
 
@@ -66,7 +78,7 @@ export class CalendarComponent implements OnInit {
     nextNextWeekSunday.setHours(23, 59, 59, 999); // Set time to the end of the day
 
     // Return both dates
-    return { thisWeekMonday, nextNextWeekSunday };
+    return {thisWeekMonday, nextNextWeekSunday};
   }
 
   goToPreviousWeek(): void {
@@ -97,6 +109,14 @@ export class CalendarComponent implements OnInit {
       .then((response) => {
         this.week = response
       })
+  }
+
+  getUserSummary() {
+    this.calendarService.getUserSummary().then((response) => {
+      this.totalDays = response.total_days;
+      this.usedDays = response.requests.length;
+      this.availableDays = this.totalDays! - this.usedDays!;
+    })
   }
 
   checkDay(requests: any[]) {
