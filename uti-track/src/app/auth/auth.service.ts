@@ -8,7 +8,7 @@ import {Router} from '@angular/router';
 })
 export class AuthService {
   client = new Client();
-  private account = new Account(this.client);
+  account = new Account(this.client);
   private _isLoggedIn$ = new BehaviorSubject<boolean>(false); // Observable for login state
   private sessionCheckInterval: any; // Interval ID for periodic session check
   isLoggedIn$ = this._isLoggedIn$.asObservable(); // Expose the observable

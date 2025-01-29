@@ -16,9 +16,8 @@
     </div>
   </nb-layout-header>
 
-
-  <nb-sidebar *ngIf="authService.userInfo" state="collapsed">
-    <nb-menu [items]="menuItems"></nb-menu>
+  <nb-sidebar *ngIf="authService.userInfo" [responsive]="true" (responsiveStateChange)="compactMode = $event" state="collapsed">
+    <nb-menu [items]="menuItems" (click)="toggleMenu()"></nb-menu>
   </nb-sidebar>
 
   <nb-layout-column>

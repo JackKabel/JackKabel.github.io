@@ -11,15 +11,41 @@ import {Router} from "@angular/router";
 export class AppComponent {
   menuItems: NbMenuItem[] = [
     {
-      title: 'Work calendar',
-      icon: 'calendar-outline',
-      link: '/calendar',
+      title: 'Home',
+      home: true,
+      icon: 'home-outline',
+      link: '/home'
+    },
+    {
+      title: 'My Projects',
+      icon: 'cube-outline',
+      badge: {
+        text: '1',
+        status: 'warning'
+      },
+      children: [
+        {
+          title: 'Work calendar',
+          icon: 'calendar-outline',
+          link: '/calendar',
+          badge: {
+            dotMode: true,
+            status: 'warning',
+          },
+        },
+      ]
     },
   ];
+  compactMode: 'mobile' | 'tablet' | 'pc' = 'pc';
 
   constructor(private sidebarService: NbSidebarService,
               protected authService: AuthService,
               private router: Router) {
+    const redirectPath = sessionStorage.getItem('redirectPath');
+    if (redirectPath) {
+      sessionStorage.removeItem('redirectPath'); // Clean up
+      void this.router.navigate([redirectPath]); // Navigate to stored route
+    }
   }
 
   login() {
@@ -31,6 +57,16 @@ export class AppComponent {
   }
 
   toggleMenu() {
-    this.sidebarService.toggle(false);
+    switch (this.compactMode) {
+      case 'pc':
+        this.sidebarService.toggle(true);
+        break;
+      case 'mobile':
+        this.sidebarService.toggle(false);
+        break;
+      case 'tablet':
+        this.sidebarService.toggle(true);
+        break;
+    }
   }
 }

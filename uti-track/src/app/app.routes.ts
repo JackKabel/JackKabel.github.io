@@ -8,6 +8,11 @@ import {isAuthenticatedGuard} from "./auth/is-authenticated.guard";
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
     component: HomeComponent,
     canActivate: []
   },
