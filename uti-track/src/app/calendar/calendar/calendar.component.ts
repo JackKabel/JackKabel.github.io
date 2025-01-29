@@ -113,8 +113,12 @@ export class CalendarComponent implements OnInit {
 
   getUserSummary() {
     this.calendarService.getUserSummary().then((response) => {
-      this.totalDays = response.total_days;
-      this.usedDays = response.requests.length;
+      if (response == null) {
+        return;
+      }
+
+      this.totalDays = response.documents[0].total_days;
+      this.usedDays = response.documents[0].requests.length;
       this.availableDays = this.totalDays! - this.usedDays!;
     })
   }

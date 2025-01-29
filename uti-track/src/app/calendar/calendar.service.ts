@@ -73,14 +73,39 @@ export class CalendarService {
 
   async getUserSummary(): Promise<any> {
     try {
-      return await this.databases.getDocument(
+      return await this.databases.listDocuments(
         this.databaseId,
         this.summaryCollectionId,
-        this.authService.userInfo.$id
+        [
+          Query.equal('user_id', this.authService.userInfo.$id)
+        ]
       );
     } catch (error) {
       console.error('Error fetching user summary:', error);
+      console.info('Creating summary for user...');
+      await this.createUserSummary().then(
+        () => {
+          console.info('Summary created successfully.');
+        }
+      )
       return null;
+    }
+  }
+
+  async createUserSummary() {
+    try {
+      await this.databases.createDocument(
+        this.databaseId,
+        this.summaryCollectionId,
+        ID.unique(),
+        {
+          user_id: this.authService.userInfo.$id,
+          total_days: 21,
+          requests: [],
+        }
+      );
+    } catch {
+
     }
   }
 
