@@ -1,6 +1,27 @@
+<nb-button-group [size]="isHandset() ? 'tiny' : 'small'" ghost (valueChange)="updateSingleSelectGroupValue($event)">
+  <button nbButtonToggle value="0">Jan</button>
+  <button nbButtonToggle value="1">Feb</button>
+  <button nbButtonToggle value="2">Mar</button>
+  <button nbButtonToggle value="3">Apr</button>
+  <button nbButtonToggle value="4">May</button>
+  <button nbButtonToggle value="5">Jun</button>
+  <button nbButtonToggle value="6">Jul</button>
+  <button nbButtonToggle value="7">Aug</button>
+  <button nbButtonToggle value="8">Sep</button>
+  <button nbButtonToggle value="9">Oct</button>
+  <button nbButtonToggle value="10">Nov</button>
+  <button nbButtonToggle value="11">Dec</button>
+</nb-button-group>
 <div class="calendar-container">
   <div class="calendar-week-view">
-    <nb-card accent="info" [status]="isToday(day) ? 'info' : 'basic'" *ngFor="let day of week">
+    <div *ngIf="!isHandset() && (firstDayOfMonth == 0)"></div>
+    <div *ngIf="!isHandset() && (firstDayOfMonth >= 2 || firstDayOfMonth == 0)"></div>
+    <div *ngIf="!isHandset() && (firstDayOfMonth >= 3 || firstDayOfMonth == 0)"></div>
+    <div *ngIf="!isHandset() && (firstDayOfMonth >= 4 || firstDayOfMonth == 0)"></div>
+    <div *ngIf="!isHandset() && (firstDayOfMonth >= 5 || firstDayOfMonth == 0)"></div>
+    <div *ngIf="!isHandset() && (firstDayOfMonth >= 6 || firstDayOfMonth == 0)"></div>
+    <nb-card [accent]="isWeekend(day) ? 'danger' : 'info'" [status]="isToday(day) ? 'info' : 'basic'"
+             *ngFor="let day of week">
       <nb-card-header>
         <span>{{ day.date | date: 'dd' }}</span>
         <span>{{ day.date | date: 'MMM' }}</span>
@@ -18,22 +39,22 @@
       </button>
     </nb-card>
   </div>
-  <nb-card accent="success">
-      <div class="days-summary">
-        <div class="summary-item">
-          <h6>Total Days</h6>
-          <p>{{ totalDays }}</p>
-        </div>
-        <div class="summary-item">
-          <h6>Days Used</h6>
-          <p>{{ usedDays }}</p>
-        </div>
-        <div class="summary-item">
-          <h6>Available Days</h6>
-          <p>{{ availableDays }}</p>
-        </div>
-      </div>
-    <button nbButton ghost (click)="getUserSummary()"><nb-icon icon="refresh-outline"></nb-icon></button>
+  <nb-card accent="success" class="days-summary">
+    <div class="summary-item">
+      <h6>Total</h6>
+      <p>{{ totalDays }}</p>
+    </div>
+    <div class="summary-item">
+      <h6>Used</h6>
+      <p>{{ usedDays }}</p>
+    </div>
+    <div class="summary-item">
+      <h6>Available</h6>
+      <p>{{ availableDays }}</p>
+    </div>
+    <button nbButton ghost (click)="getUserSummary()">
+      <nb-icon icon="refresh-outline"></nb-icon>
+    </button>
   </nb-card>
 </div>
 

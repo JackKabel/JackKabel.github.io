@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {CalendarService} from "../calendar.service";
 import {AuthService} from "../../auth/auth.service";
 import {RealtimeResponseEvent} from "appwrite";
+import {isHandset} from "../../app.signals";
 
 export interface CalendarDay {
   $id: string;
@@ -18,18 +19,22 @@ export interface CalendarDay {
 })
 export class CalendarComponent implements OnInit {
   currentDate: Date = new Date();
+  firstDayOfMonth: number = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1).getDay();
   week: CalendarDay[] = [];
   totalDays?: number;
   usedDays?: number;
   availableDays?: number;
+  singleSelectGroupValue = [];
+
 
   constructor(private calendarService: CalendarService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private cdr: ChangeDetectorRef) {
 
   }
 
   ngOnInit(): void {
-    this.getCalendarRecords();
+    this.getCalendarRecords(this.getMonthRange);
     this.realtimeConnect();
     this.getUserSummary();
   }
@@ -45,8 +50,8 @@ export class CalendarComponent implements OnInit {
       this.week = this.week.map(item =>
         item.$id === updatedId ? {...item, ...response.payload} : item
       );
-      -- this.availableDays!;
-      ++ this.usedDays!;
+      --this.availableDays!;
+      ++this.usedDays!;
     });
   }
 
@@ -58,39 +63,40 @@ export class CalendarComponent implements OnInit {
           day.requests = day.requests.filter((request: any) => request.$id !== requestToRemove.$id);
         }
       })
-      ++ this.availableDays!;
-      -- this.usedDays!;
+      ++this.availableDays!;
+      --this.usedDays!;
     });
   }
 
-  getDateRanges(currentDate: Date): { thisWeekMonday: Date; nextNextWeekSunday: Date } {
-    const currentDay = currentDate.getDay(); // Get current day of the week (0: Sunday, 6: Saturday)
+  getWeekRanges(): { start: Date; end: Date } {
+    const currentDay = new Date().getDay(); // Get current day of the week (0: Sunday, 6: Saturday)
     const diffToMonday = currentDay === 0 ? 6 : currentDay - 1; // Calculate days since Monday (Monday = 0)
+    const thisWeekStart = new Date();
+    thisWeekStart.setDate(new Date().getDate() - diffToMonday); // Go back to this week's Monday
+    thisWeekStart.setHours(0, 0, 0, 0); // Reset time to the start of the day
 
-    // Calculate the first day of this week (Monday)
-    const thisWeekMonday = new Date(currentDate);
-    thisWeekMonday.setDate(currentDate.getDate() - diffToMonday); // Go back to this week's Monday
-    thisWeekMonday.setHours(0, 0, 0, 0); // Reset time to the start of the day
-
-    // Calculate the last day of the week after the following week (Sunday)
-    const nextNextWeekSunday = new Date(currentDate);
-    nextNextWeekSunday.setDate(currentDate.getDate() + (7 - diffToMonday) + 13); // Move forward to the Sunday after the next week
-    nextNextWeekSunday.setHours(23, 59, 59, 999); // Set time to the end of the day
+    const thisWeekEnd = new Date();
+    thisWeekEnd.setDate(thisWeekStart.getDate() + 6); // Move forward to the Sunday after the next week
+    thisWeekEnd.setHours(23, 59, 59, 999); // Set time to the end of the day
 
     // Return both dates
-    return {thisWeekMonday, nextNextWeekSunday};
+    return {start: thisWeekStart, end: thisWeekEnd};
   }
 
-  goToPreviousWeek(): void {
-    const previousWeek = new Date(this.currentDate);
-    previousWeek.setDate(this.currentDate.getDate() - 7);
-    this.currentDate = previousWeek;
-  }
+  getMonthRange(): { start: Date; end: Date } {
+    // Get the first day of the current month
+    const monthStart = new Date(); // First day of the month
+    monthStart.setDate(1)
+    monthStart.setHours(0, 0, 0, 0); // Set time to the start of the day
 
-  goToNextWeek(): void {
-    const nextWeek = new Date(this.currentDate);
-    nextWeek.setDate(this.currentDate.getDate() + 7);
-    this.currentDate = nextWeek;
+    // Get the last day of the current month
+    const monthEnd = new Date(); // Last day of the month
+    monthEnd.setMonth(monthEnd.getMonth() + 1);
+    monthEnd.setDate(0);
+    monthEnd.setHours(23, 59, 59, 999); // Set time to the end of the day
+
+    // Return both dates
+    return {start: monthStart, end: monthEnd};
   }
 
   sendRequest(id: any): void {
@@ -102,10 +108,10 @@ export class CalendarComponent implements OnInit {
     void this.calendarService.revokeFreeDay(usersRequest.$id)
   }
 
-  getCalendarRecords(): void {
+  getCalendarRecords(func: Function): void {
     this.calendarService.getCalendarEvents(
-      this.getDateRanges(new Date()).thisWeekMonday,
-      this.getDateRanges(new Date()).nextNextWeekSunday)
+      func().start,
+      func().end)
       .then((response) => {
         this.week = response
       })
@@ -117,8 +123,8 @@ export class CalendarComponent implements OnInit {
         return;
       }
 
-      this.totalDays = response.documents[0].total_days;
-      this.usedDays = response.documents[0].requests.length;
+      this.totalDays = 21;
+      this.usedDays = response.total;
       this.availableDays = this.totalDays! - this.usedDays!;
     })
   }
@@ -141,4 +147,16 @@ export class CalendarComponent implements OnInit {
     // Compare the stripped dates
     return givenDate.getTime() === today.getTime();
   }
+
+  isWeekend(day: CalendarDay): boolean {
+    const givenDate = new Date(day.date);
+    return givenDate.getDay() === 0 || givenDate.getDay() === 6;
+  }
+
+  updateSingleSelectGroupValue(value: any): void {
+    this.singleSelectGroupValue = value;
+    this.cdr.markForCheck();
+  }
+
+  protected readonly isHandset = isHandset;
 }

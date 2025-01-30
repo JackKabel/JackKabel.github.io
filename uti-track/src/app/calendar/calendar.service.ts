@@ -60,6 +60,7 @@ export class CalendarService {
         this.databaseId,
         this.calendarCollectionId,
         [
+          Query.limit(31),
           Query.greaterThanEqual('date', from.toISOString()),
           Query.lessThanEqual('date', to.toISOString())
         ]
@@ -75,37 +76,14 @@ export class CalendarService {
     try {
       return await this.databases.listDocuments(
         this.databaseId,
-        this.summaryCollectionId,
+        this.requestsCollectionId,
         [
           Query.equal('user_id', this.authService.userInfo.$id)
         ]
       );
     } catch (error) {
       console.error('Error fetching user summary:', error);
-      console.info('Creating summary for user...');
-      await this.createUserSummary().then(
-        () => {
-          console.info('Summary created successfully.');
-        }
-      )
       return null;
-    }
-  }
-
-  async createUserSummary() {
-    try {
-      await this.databases.createDocument(
-        this.databaseId,
-        this.summaryCollectionId,
-        ID.unique(),
-        {
-          user_id: this.authService.userInfo.$id,
-          total_days: 21,
-          requests: [],
-        }
-      );
-    } catch {
-
     }
   }
 
@@ -129,7 +107,6 @@ export class CalendarService {
               user_name: this.authService.userInfo.name,
               date: day.date,
               calendar_id: day.$id,
-              userFreeDaysSummary: this.authService.userInfo.$id
             }
           ]
         }

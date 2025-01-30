@@ -1,14 +1,16 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NbMenuItem, NbSidebarService} from "@nebular/theme";
 import {AuthService} from "./auth/auth.service";
 import {Router} from "@angular/router";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {isHandset} from "./app.signals";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   menuItems: NbMenuItem[] = [
     {
       title: 'Home',
@@ -40,12 +42,19 @@ export class AppComponent {
 
   constructor(private sidebarService: NbSidebarService,
               protected authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private breakpointObserver: BreakpointObserver) {
     const redirectPath = sessionStorage.getItem('redirectPath');
     if (redirectPath) {
       sessionStorage.removeItem('redirectPath'); // Clean up
       void this.router.navigate([redirectPath]); // Navigate to stored route
     }
+  }
+
+  ngOnInit() {
+    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe(result => {
+      isHandset.set(result.matches);
+    });
   }
 
   login() {

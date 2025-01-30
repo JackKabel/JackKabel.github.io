@@ -7,6 +7,7 @@ import {provideRouter, RouterModule, withComponentInputBinding} from "@angular/r
 import {routes} from "./app.routes";
 import {
   NbAlertModule,
+  NbButtonGroupModule,
   NbButtonModule,
   NbCalendarModule,
   NbCalendarRangeModule,
@@ -52,6 +53,7 @@ import {CalendarComponent} from './calendar/calendar/calendar.component';
     NbProgressBarModule,
     NbAlertModule,
     NbUserModule,
+    NbButtonGroupModule,
   ],
   providers: [
     provideAnimationsAsync(),
