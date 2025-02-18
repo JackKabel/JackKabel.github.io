@@ -20,24 +20,34 @@
     <div *ngIf="!isHandset() && (firstDayOfMonth >= 4 || firstDayOfMonth == 0)"></div>
     <div *ngIf="!isHandset() && (firstDayOfMonth >= 5 || firstDayOfMonth == 0)"></div>
     <div *ngIf="!isHandset() && (firstDayOfMonth >= 6 || firstDayOfMonth == 0)"></div>
-    <nb-card [accent]="isWeekend(day) ? 'danger' : 'info'" [status]="isToday(day) ? 'info' : 'basic'"
-             *ngFor="let day of week">
-      <nb-card-header>
-        <span>{{ day.date | date: 'dd' }}</span>
-        <span>{{ day.date | date: 'MMM' }}</span>
-      </nb-card-header>
-      <nb-card-body>
-        <div *ngFor="let req of day.requests" class="user-chip">
-          <nb-user size="tiny" [name]="req.user_name"></nb-user>
-        </div>
-      </nb-card-body>
-      <button *ngIf="!checkDay(day.requests)" nbButton ghost (click)="sendRequest(day)">
-        <nb-icon status="warning" icon="calendar-outline"></nb-icon>
-      </button>
-      <button *ngIf="checkDay(day.requests)" nbButton ghost (click)="revokeFreeDay(day)">
-        <nb-icon status="warning" icon="close"></nb-icon>
-      </button>
-    </nb-card>
+    <nb-flip-card *ngFor="let day of week" [showToggleButton]="false" #flip>
+      <nb-card-front>
+        <nb-card [accent]="isWeekend(day) ? 'danger' : 'info'" [status]="isToday(day) ? 'info' : 'basic'">
+          <nb-card-header (click)="flip.toggle()">
+            <span>{{ day.date | date: 'dd' }}</span>
+            <span>{{ day.date | date: 'MMM' }}</span>
+          </nb-card-header>
+          <nb-card-body class="dots" (click)="flip.toggle()">
+            <div *ngFor="let req of day.requests" class="dot"></div>
+          </nb-card-body>
+          <button *ngIf="!checkDay(day.requests)" nbButton ghost (click)="sendRequest(day)">
+            <nb-icon status="warning" icon="calendar-outline"></nb-icon>
+          </button>
+          <button *ngIf="checkDay(day.requests)" nbButton ghost (click)="revokeFreeDay(day)">
+            <nb-icon status="warning" icon="close"></nb-icon>
+          </button>
+        </nb-card>
+      </nb-card-front>
+      <nb-card-back (click)="flip.toggle()">
+        <nb-card>
+          <nb-card-body class="dots">
+            <div *ngFor="let req of day.requests" class="user-chip">
+              <nb-user size="tiny" [name]="req.user_name"></nb-user>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </nb-card-back>
+    </nb-flip-card>
   </div>
   <nb-card accent="success" class="days-summary">
     <div class="summary-item">
