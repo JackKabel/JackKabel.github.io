@@ -1,16 +1,16 @@
 <nb-button-group [size]="isHandset() ? 'tiny' : 'small'" ghost (valueChange)="updateSingleSelectGroupValue($event)">
-  <button nbButtonToggle value="0">Jan</button>
-  <button nbButtonToggle value="1">Feb</button>
-  <button nbButtonToggle value="2">Mar</button>
-  <button nbButtonToggle value="3">Apr</button>
-  <button nbButtonToggle value="4">May</button>
-  <button nbButtonToggle value="5">Jun</button>
-  <button nbButtonToggle value="6">Jul</button>
-  <button nbButtonToggle value="7">Aug</button>
-  <button nbButtonToggle value="8">Sep</button>
-  <button nbButtonToggle value="9">Oct</button>
-  <button nbButtonToggle value="10">Nov</button>
-  <button nbButtonToggle value="11">Dec</button>
+  <button nbButtonToggle [value]="0">Jan</button>
+  <button nbButtonToggle [value]="1">Feb</button>
+  <button nbButtonToggle [value]="2">Mar</button>
+  <button nbButtonToggle [value]="3">Apr</button>
+  <button nbButtonToggle [value]="4">May</button>
+  <button nbButtonToggle [value]="5">Jun</button>
+  <button nbButtonToggle [value]="6">Jul</button>
+  <button nbButtonToggle [value]="7">Aug</button>
+  <button nbButtonToggle [value]="8">Sep</button>
+  <button nbButtonToggle [value]="9">Oct</button>
+  <button nbButtonToggle [value]="10">Nov</button>
+  <button nbButtonToggle [value]="11">Dec</button>
 </nb-button-group>
 <div class="calendar-container">
   <div class="calendar-week-view">

@@ -24,7 +24,6 @@ export class CalendarComponent implements OnInit {
   totalDays?: number;
   usedDays?: number;
   availableDays?: number;
-  singleSelectGroupValue = [];
 
 
   constructor(private calendarService: CalendarService,
@@ -68,29 +67,18 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  getWeekRanges(): { start: Date; end: Date } {
-    const currentDay = new Date().getDay(); // Get current day of the week (0: Sunday, 6: Saturday)
-    const diffToMonday = currentDay === 0 ? 6 : currentDay - 1; // Calculate days since Monday (Monday = 0)
-    const thisWeekStart = new Date();
-    thisWeekStart.setDate(new Date().getDate() - diffToMonday); // Go back to this week's Monday
-    thisWeekStart.setHours(0, 0, 0, 0); // Reset time to the start of the day
-
-    const thisWeekEnd = new Date();
-    thisWeekEnd.setDate(thisWeekStart.getDate() + 6); // Move forward to the Sunday after the next week
-    thisWeekEnd.setHours(23, 59, 59, 999); // Set time to the end of the day
-
-    // Return both dates
-    return {start: thisWeekStart, end: thisWeekEnd};
-  }
-
-  getMonthRange(): { start: Date; end: Date } {
-    // Get the first day of the current month
-    const monthStart = new Date(); // First day of the month
+  getMonthRange(monthIndex?: number): { start: Date; end: Date } {
+    const monthStart = new Date();
+    if (monthIndex != undefined) {
+      monthStart.setMonth(monthIndex);
+    }
     monthStart.setDate(1)
     monthStart.setHours(0, 0, 0, 0); // Set time to the start of the day
 
-    // Get the last day of the current month
     const monthEnd = new Date(); // Last day of the month
+    if (monthIndex != undefined) {
+      monthEnd.setMonth(monthIndex);
+    }
     monthEnd.setMonth(monthEnd.getMonth() + 1);
     monthEnd.setDate(0);
     monthEnd.setHours(23, 59, 59, 999); // Set time to the end of the day
@@ -108,11 +96,14 @@ export class CalendarComponent implements OnInit {
     void this.calendarService.revokeFreeDay(usersRequest.$id)
   }
 
-  getCalendarRecords(func: Function): void {
+  getCalendarRecords(func: Function, monthIndex?: number): void {
     this.calendarService.getCalendarEvents(
-      func().start,
-      func().end)
+      func(monthIndex).start,
+      func(monthIndex).end)
       .then((response) => {
+        if (monthIndex != undefined) {
+          this.firstDayOfMonth = new Date(this.currentDate.getFullYear(), monthIndex, 1).getDay();
+        }
         this.week = response
       })
   }
@@ -154,7 +145,7 @@ export class CalendarComponent implements OnInit {
   }
 
   updateSingleSelectGroupValue(value: any): void {
-    this.singleSelectGroupValue = value;
+    this.getCalendarRecords(this.getMonthRange, value);
     this.cdr.markForCheck();
   }
 
