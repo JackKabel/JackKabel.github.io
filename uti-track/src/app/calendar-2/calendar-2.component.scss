@@ -1,0 +1,52 @@
+.container {
+  height: 100%;
+  padding: 0 0.1rem 1rem 0.1rem;
+  display: grid;
+  grid-template-rows: 1.5rem 1.5rem 1fr;
+  gap: 0.5rem;
+}
+
+.month-container {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.month-selector {
+  display: grid;
+  grid-template-columns: repeat(12, 3rem);
+  place-items: center;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
+.days-of-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  text-align: center;
+  filter: drop-shadow(0 0 1rem gray);
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 0.25rem;
+}
+
+.days-of-week > *  {
+  font-size: 0.75rem;
+  border: 1px dashed rgba(128, 128, 128, 0.5);
+  box-shadow: 0 0 0.25rem gray inset;
+  border-radius: 12px;
+
+  &:nth-child(n+6) {
+    color: coral;
+  }
+}
+
+.day {
+  text-align: center;
+}

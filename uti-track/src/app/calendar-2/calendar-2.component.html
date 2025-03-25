@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="month-container">
+    <button nbButton ghost shape="round" size="tiny" status="primary" (click)="scrollLeft()">
+      <nb-icon icon="chevron-left-outline"></nb-icon>
+    </button>
+
+    <div class="month-selector" #monthSelector>
+      <button nbButton ghost size="tiny" *ngFor="let month of months">{{ month }}</button>
+    </div>
+
+    <button nbButton ghost shape="round" size="tiny" status="primary" (click)="scrollRight()">
+      <nb-icon icon="chevron-right-outline"></nb-icon>
+    </button>
+  </div>
+
+  <div class="days-of-week">
+    <div>Mon.</div>
+    <div>Tue.</div>
+    <div>Wed.</div>
+    <div>Thu.</div>
+    <div>Fri.</div>
+    <div>Sat.</div>
+    <div>Sun.</div>
+  </div>
+  <div class="days-grid">
+    <nb-card [accent]="(day.day % 7 == 0 || day.day % 7 == 6) ? 'danger' : 'control'" *ngFor="let day of month" class="day">
+      <span>{{ day.day }}</span>
+    </nb-card>
+  </div>
+</div>

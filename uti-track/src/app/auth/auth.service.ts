@@ -65,6 +65,8 @@ export class AuthService {
       console.log('Registration successful:', user);
     } catch (error) {
       console.error('Registration failed:', error);
+    } finally {
+      await this.login(email, password);
     }
   }
 

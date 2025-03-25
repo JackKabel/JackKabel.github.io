@@ -27,6 +27,7 @@ import {NbEvaIconsModule} from "@nebular/eva-icons";
 import {AuthComponent} from './auth/auth/auth.component';
 import {HomeComponent} from './home/home.component';
 import {CalendarComponent} from './calendar/calendar/calendar.component';
+import { Calendar2Component } from './calendar-2/calendar-2.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {CalendarComponent} from './calendar/calendar/calendar.component';
     AuthComponent,
     HomeComponent,
     CalendarComponent,
+    Calendar2Component,
   ],
   imports: [
     BrowserModule,

@@ -30,6 +30,11 @@ export class AppComponent implements OnInit{
           title: 'Work calendar',
           icon: 'calendar-outline',
           link: '/calendar',
+        },
+        {
+          title: 'Work calendar',
+          icon: 'calendar-outline',
+          link: '/calendar-2',
           badge: {
             dotMode: true,
             status: 'warning',
