@@ -3,6 +3,17 @@
     <nb-card class="tl"></nb-card>
     <nb-card class="tr" accent="warning">
       <nb-card-header>Welcome!</nb-card-header>
+      <button (click)=" fileInput.click()" nbButton>
+        <nb-icon icon="upload-outline"></nb-icon>
+      </button>
+      <button (click)=" fileInputform.click()" nbButton ghost>
+        <nb-icon icon="upload-outline"></nb-icon>
+      </button>
+      <input #fileInput (change)="uploadFile($event)" style="display: none;" type="file">
+
+      <form onsubmit="return false;">
+        <input #fileInputform (change)="uploadFile($event)" style="display: none;" type="file">
+      </form>
     </nb-card>
     <nb-card class="bl" accent="warning">
       <nb-card-header>Hi!</nb-card-header>

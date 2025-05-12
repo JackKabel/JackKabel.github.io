@@ -1,0 +1,184 @@
+<div class="layout">
+  <nb-card class="container-panel">
+    <nb-card-body>
+      <div class="controls">
+        <div class="control-group">
+          <p>
+            Direction & Wrapping
+            <nb-icon icon="question-mark-circle-outline"
+                     nbTooltip="Controls the direction and wrapping behavior of flex items"
+                     nbTooltipStatus="primary"></nb-icon>
+          </p>
+          <div class="control-item">
+            <label>
+              flex-direction:
+              <nb-icon icon="question-mark-circle-outline"
+                       nbTooltip="Sets the direction of the main axis (horizontal or vertical)"
+                       nbTooltipStatus="primary"></nb-icon>
+            </label>
+            <nb-select (selectedChange)="onPropertyChange('flexDirection', $event)"
+                       [(ngModel)]="containerState.flexDirection"
+                       fullWidth>
+              <nb-option value="row">row</nb-option>
+              <nb-option value="row-reverse">row-reverse</nb-option>
+              <nb-option value="column">column</nb-option>
+              <nb-option value="column-reverse">column-reverse</nb-option>
+            </nb-select>
+          </div>
+          <div class="control-item">
+            <label>
+              flex-wrap:
+              <nb-icon icon="question-mark-circle-outline"
+                       nbTooltip="Controls whether items wrap to new lines when they run out of space"
+                       nbTooltipStatus="primary"></nb-icon>
+            </label>
+            <nb-select (selectedChange)="onPropertyChange('flexWrap', $event)" [(ngModel)]="containerState.flexWrap"
+                       fullWidth>
+              <nb-option value="nowrap">nowrap</nb-option>
+              <nb-option value="wrap">wrap</nb-option>
+              <nb-option value="wrap-reverse">wrap-reverse</nb-option>
+            </nb-select>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <p>
+            Alignment
+            <nb-icon icon="question-mark-circle-outline"
+                     nbTooltip="Controls how items are aligned and distributed in the container"
+                     nbTooltipStatus="primary"></nb-icon>
+          </p>
+          <div class="control-item">
+            <label>
+              justify-content:
+              <nb-icon icon="question-mark-circle-outline" nbTooltip="Aligns items along the main axis"
+                       nbTooltipStatus="primary"></nb-icon>
+            </label>
+            <nb-select (selectedChange)="onPropertyChange('justifyContent', $event)"
+                       [(ngModel)]="containerState.justifyContent"
+                       fullWidth>
+              <nb-option value="flex-start">flex-start</nb-option>
+              <nb-option value="flex-end">flex-end</nb-option>
+              <nb-option value="center">center</nb-option>
+              <nb-option value="space-between">space-between</nb-option>
+              <nb-option value="space-around">space-around</nb-option>
+              <nb-option value="space-evenly">space-evenly</nb-option>
+            </nb-select>
+          </div>
+          <div class="control-item">
+            <label>
+              align-items:
+              <nb-icon icon="question-mark-circle-outline" nbTooltip="Aligns items along the cross axis"
+                       nbTooltipStatus="primary"></nb-icon>
+            </label>
+            <nb-select (selectedChange)="onPropertyChange('alignItems', $event)" [(ngModel)]="containerState.alignItems"
+                       fullWidth>
+              <nb-option value="stretch">stretch</nb-option>
+              <nb-option value="flex-start">flex-start</nb-option>
+              <nb-option value="flex-end">flex-end</nb-option>
+              <nb-option value="center">center</nb-option>
+              <nb-option value="baseline">baseline</nb-option>
+            </nb-select>
+          </div>
+          <div class="control-item">
+            <label>
+              align-content:
+              <nb-icon icon="question-mark-circle-outline"
+                       nbTooltip="Aligns flex lines when there's extra space in the cross axis (only works when there are multiple lines)"
+                       nbTooltipStatus="primary"></nb-icon>
+            </label>
+            <nb-select (selectedChange)="onPropertyChange('alignContent', $event)"
+                       [(ngModel)]="containerState.alignContent"
+                       fullWidth>
+              <nb-option value="stretch">stretch</nb-option>
+              <nb-option value="flex-start">flex-start</nb-option>
+              <nb-option value="flex-end">flex-end</nb-option>
+              <nb-option value="center">center</nb-option>
+              <nb-option value="space-between">space-between</nb-option>
+              <nb-option value="space-around">space-around</nb-option>
+              <nb-option value="space-evenly">space-evenly</nb-option>
+            </nb-select>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <p>
+            Spacing
+            <nb-icon icon="question-mark-circle-outline" nbTooltip="Controls spacing between flex items"
+                     nbTooltipStatus="primary"></nb-icon>
+          </p>
+          <div class="control-item">
+            <label>
+              row-gap:
+              <nb-icon icon="question-mark-circle-outline" nbTooltip="Sets the gap between rows"
+                       nbTooltipStatus="primary"></nb-icon>
+            </label>
+            <div class="split-control">
+              <input (ngModelChange)="onRowGapChange()" [(ngModel)]="rowGapValue" min="0" nbInput type="number">
+              <nb-select (selectedChange)="onRowGapChange()" [(ngModel)]="rowGapUnit">
+                <nb-option value="px">px</nb-option>
+                <nb-option value="rem">rem</nb-option>
+                <nb-option value="%">%</nb-option>
+                <nb-option value="em">em</nb-option>
+                <nb-option value="vw">vw</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="control-item">
+            <label>
+              column-gap:
+              <nb-icon icon="question-mark-circle-outline" nbTooltip="Sets the gap between columns"
+                       nbTooltipStatus="primary"></nb-icon>
+            </label>
+            <div class="split-control">
+              <input (ngModelChange)="onColumnGapChange()" [(ngModel)]="columnGapValue" min="0" nbInput type="number">
+              <nb-select (selectedChange)="onColumnGapChange()" [(ngModel)]="columnGapUnit">
+                <nb-option value="px">px</nb-option>
+                <nb-option value="rem">rem</nb-option>
+                <nb-option value="%">%</nb-option>
+                <nb-option value="em">em</nb-option>
+                <nb-option value="vw">vw</nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <nb-card class="flex-container-card">
+    <div class="axis-indicator main-axis">main axis {{ getAxisDirection().main }}</div>
+    <div class="axis-indicator cross-axis">cross axis {{ getAxisDirection().cross }}</div>
+    <nb-card-body>
+      <div
+        [style.align-content]="containerState.alignContent"
+        [style.align-items]="containerState.alignItems"
+        [style.column-gap]="containerState.columnGap"
+        [style.flex-direction]="containerState.flexDirection"
+        [style.flex-wrap]="containerState.flexWrap"
+        [style.justify-content]="containerState.justifyContent"
+        [style.row-gap]="containerState.rowGap"
+        [style.width]="containerWidth === '100%' ? '100%' : containerWidth + 'px'"
+        class="flex-container"
+        id="flex-container">
+
+        <div *ngFor="let item of items" [attr.data-item]="item.id" class="flex-item">
+          <div class="flex-item-controls">
+            <button class="flex-item-btn">Edit</button>
+          </div>
+          <span class="flex-item-number">{{ item.id }}</span>
+          {{ item.content }}
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <div class="items-panel">
+    <button (click)="addItem()" nbButton shape="semi-round" size="small" status="primary">
+      <nb-icon icon="plus-outline"></nb-icon>
+    </button>
+    <button (click)="removeItem()" nbButton shape="semi-round" size="small" status="danger">
+      <nb-icon icon="minus-outline"></nb-icon>
+    </button>
+  </div>
+</div>
