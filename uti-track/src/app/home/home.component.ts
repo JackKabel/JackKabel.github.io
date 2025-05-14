@@ -9,7 +9,7 @@ import {AuthService} from "../auth/auth.service";
 })
 export class HomeComponent {
 
-  selectedFile: File | null = null;
+  selectedFile: string = '';
   uploadedFile: File | null = null;
   private client: Client;
   private storage: Storage;
@@ -24,18 +24,25 @@ export class HomeComponent {
   }
 
   uploadFile(event: Event): void {
+    this.selectedFile = 'start'
     event.preventDefault(); // <-- Add this
     event.stopPropagation(); // <-- Optional but helpful
+    this.selectedFile = 'events n shit'
 
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
+    this.selectedFile = 'before if'
+
     if (file) {
+      this.selectedFile = 'in if'
+
       this.uploadedFile = file
       this.storage.createFile(
         '679c7995001d789e10e3',
         ID.unique(),
         file
       ).then(r => {
+        this.selectedFile = 'in then'
         console.log('Response:', r);
       });
     }
