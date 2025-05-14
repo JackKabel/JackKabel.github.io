@@ -6,15 +6,13 @@
       <button (click)=" fileInput.click()" nbButton>
         <nb-icon icon="upload-outline"></nb-icon>
       </button>
-      <button (click)=" fileInputform.click()" nbButton ghost>
-        <nb-icon icon="upload-outline"></nb-icon>
-      </button>
-      <input #fileInput (change)="uploadFile($event)" style="display: none;" type="file">
+        <input
+          type="file"
+          #fileInput
+          (change)="uploadFile($event)"
+          style="display: none;">
 
-      <form onsubmit="return false;">
-        <input #fileInputform (change)="uploadFile($event)" style="display: none;" type="file">
-      </form>
-
+      <span>{{selectedFile?.name}}</span>
       <span>{{uploadedFile?.name}}</span>
     </nb-card>
     <nb-card class="bl" accent="warning">
