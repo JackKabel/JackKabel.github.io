@@ -6,6 +6,9 @@ import {Component} from '@angular/core';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+
+  uploadedFile?: File;
+
   uploadFile(event: Event): void {
     event.preventDefault(); // <-- Add this
     event.stopPropagation(); // <-- Optional but helpful
@@ -13,7 +16,7 @@ export class HomeComponent {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      // Upload logic here (e.g., call a service)
+      this.uploadedFile = file
       console.log('Selected file:', file);
     }
   }

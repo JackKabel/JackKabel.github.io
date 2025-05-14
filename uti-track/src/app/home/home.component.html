@@ -14,6 +14,8 @@
       <form onsubmit="return false;">
         <input #fileInputform (change)="uploadFile($event)" style="display: none;" type="file">
       </form>
+
+      <span>{{uploadedFile?.name}}</span>
     </nb-card>
     <nb-card class="bl" accent="warning">
       <nb-card-header>Hi!</nb-card-header>
