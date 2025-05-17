@@ -1,9 +1,10 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 
 @Component({
-  selector: 'app-calendar-2',
-  templateUrl: './calendar-2.component.html',
-  styleUrl: './calendar-2.component.scss'
+    selector: 'app-calendar-2',
+    templateUrl: './calendar-2.component.html',
+    styleUrl: './calendar-2.component.scss',
+    standalone: false
 })
 export class Calendar2Component {
     month: any = [
