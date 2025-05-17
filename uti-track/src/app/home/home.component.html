@@ -3,17 +3,6 @@
     <nb-card class="tl"></nb-card>
     <nb-card class="tr" accent="warning">
       <nb-card-header>Welcome!</nb-card-header>
-      <button (click)=" fileInput.click()" nbButton>
-        <nb-icon icon="upload-outline"></nb-icon>
-      </button>
-        <input
-          type="file"
-          #fileInput
-          (change)="uploadFile($event)"
-          style="display: none;">
-
-      <span>{{selectedFile}}</span>
-      <span>{{uploadedFile?.name}}</span>
     </nb-card>
     <nb-card class="bl" accent="warning">
       <nb-card-header>Hi!</nb-card-header>
