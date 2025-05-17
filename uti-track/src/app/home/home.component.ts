@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {Client, ID, Storage} from "appwrite";
-import {AuthService} from "../auth/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -11,7 +10,7 @@ export class HomeComponent {
 
   selectedFile: string = '';
   uploadedFile: File | null = null;
-  private client: Client;
+  private readonly client: Client;
   private storage: Storage;
 
   constructor() {
